@@ -1,55 +1,47 @@
 import streamlit as st
+import os
+from openai import OpenAI
 
-st.title("🌍 Universal Career AI Guide")
+# 🔐 API key from secrets
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-user_input = st.text_input("Enter your interest, goal, or skill")
+st.set_page_config(page_title="InternAI Chat", page_icon="🤖")
 
-if st.button("Recommend"):
+st.title("🤖 InternAI - AI Career Chatbot")
 
-    text = user_input.lower()
+# Chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = [
+        {"role": "assistant", "content": "Hi! 👋 Tell me your interests, goals, or confusion. I'll guide your career."}
+    ]
 
-    # 🔹 Dictionary of fields
-    career_map = {
-        "ai data science": ["python", "ai", "ml", "data", "analytics"],
-        "web development": ["web", "html", "css", "frontend", "design"],
-        "software development": ["java", "c++", "coding", "programming"],
-        "cyber security": ["hacking", "security", "cyber"],
-        "civil services (upsc)": ["upsc", "ias", "government"],
-        "engineering (iit/jee)": ["iit", "jee", "engineering"],
-        "medical (doctor)": ["neet", "doctor", "medical"],
-        "business / startup": ["business", "startup", "entrepreneur"],
-        "law": ["law", "advocate", "legal"],
-        "philosophy / spirituality": ["philosophy", "vedanta", "spiritual"],
-        "teaching / education": ["teacher", "teaching", "education"],
-        "finance": ["finance", "stock", "trading"],
-        "arts / design": ["art", "drawing", "creative"],
-        "media / content": ["youtube", "content", "media"],
-        "sports": ["sports", "cricket", "football"],
-    }
+# Display chat
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
-    found = False
+# User input
+user_input = st.chat_input("Type your interest, goal, or question...")
 
-    for career, keywords in career_map.items():
-        for word in keywords:
-            if word in text:
-                st.success(f"🎯 Recommended Path: {career.title()}")
-                found = True
-                break
-        if found:
-            break
+if user_input:
+    # Show user message
+    st.session_state.messages.append({"role": "user", "content": user_input})
+    with st.chat_message("user"):
+        st.write(user_input)
 
-    # 🔥 Smart fallback (no "no match" ever)
-    if not found:
-        st.success("🎯 Recommended Path: Explore interdisciplinary careers")
-        st.info("""
-💡 You may explore:
-- Technology + Business
-- Philosophy + Psychology
-- Content Creation + Education
-- Social Work + Policy
+    # AI response
+    with st.chat_message("assistant"):
+        with st.spinner("Thinking... 🤖"):
 
-👉 Start with your curiosity and build skills gradually.
+            response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "You are a career guidance expert. Ask follow-up questions if needed and give clear, practical advice."}
+                ] + st.session_state.messages
+            )
 
-*KNOW- "WHO ARE YOU?"- THAT WILL DEFINE YOUR REAL PATH..*.
-*READ RIGHT PHILOSOPHY AND PHILOSOPHERS LIKE SOCRATES, KABIRDAS,UPNISHAD(VEDANTA),ADI SHANKARACHARYA JI ETC. TO KNOW YOURSELF AND YOUR LIFE'S REAL GOAL".
-""")
+            reply = response.choices[0].message.content
+
+            st.write(reply)
+
+    st.session_state.messages.append({"role": "assistant", "content": reply})
