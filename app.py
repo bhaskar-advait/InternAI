@@ -1,42 +1,82 @@
 import streamlit as st
-import requests
 
-st.title("🤖 InternAI - Smart Career AI")
+st.set_page_config(page_title="InternAI Chat", page_icon="🤖")
 
-user_input = st.text_input("Enter your interest, goal, or skill")
+st.title("🤖 InternAI - Mini ChatGPT (Offline AI)")
 
-if st.button("Recommend"):
+# chat history
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-    if user_input.strip() == "":
-        st.warning("⚠️ Please enter something")
+# show chat
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
+
+# user input
+user_input = st.chat_input("Ask anything about career, study, life...")
+
+if user_input:
+    st.session_state.messages.append({"role": "user", "content": user_input})
+
+    with st.chat_message("user"):
+        st.write(user_input)
+
+    text = user_input.lower()
+
+    # 🤖 smart response logic
+    if "ai" in text or "technology" in text:
+        reply = """AI is a great field 🚀  
+👉 Learn Python + ML  
+👉 Build projects  
+👉 Try internships  
+👉 Do Kaggle practice  
+
+Do you want roadmap or free resources?"""
+
+    elif "upsc" in text:
+        reply = """UPSC needs consistency 📚  
+👉 Start with NCERT  
+👉 Daily current affairs  
+👉 Answer writing practice  
+
+Which subject do you like most?"""
+
+    elif "iit" in text or "jee" in text:
+        reply = """For IIT 🎯  
+👉 Focus on Physics, Chemistry, Math  
+👉 Solve PYQs  
+👉 Daily practice  
+
+Are you in class 11 or 12?"""
+
+    elif "philosophy" in text:
+        reply = """Interesting choice 🧠  
+👉 Read Indian + Western philosophy  
+👉 Can go for UPSC / teaching / writing  
+
+Do you want career or knowledge guidance?"""
+
+    elif "business" in text or "startup" in text:
+        reply = """Entrepreneurship 🔥  
+👉 Learn marketing & sales  
+👉 Start small  
+👉 Solve real problems  
+
+What idea do you have in mind?"""
+
+    elif "hello" in text or "hi" in text:
+        reply = "Hello 👋 I'm your AI career guide. Tell me your goal or confusion."
+
     else:
-        url = "https://chatgpt-42.p.rapidapi.com/conversationgpt4"
+        reply = """I can help with:  
+👉 Career guidance  
+👉 Skills roadmap  
+👉 Study planning  
 
-        payload = {
-            "messages": [
-                {
-                    "role": "user",
-                    "content": f"Suggest career path for: {user_input}"
-                }
-            ],
-            "system_prompt": "You are a career expert. Give clear guidance with steps.",
-            "temperature": 0.7,
-            "top_k": 5,
-            "top_p": 0.9,
-            "max_tokens": 300
-        }
+Tell me your interest (AI, UPSC, business, etc.)"""
 
-        headers = {
-            "content-type": "application/json",
-            "X-RapidAPI-Key": "86cbc6b90cmshdbc6eb552684adbp13a2c5jsnf0a18a7af4ce",
-            "X-RapidAPI-Host": "chatgpt-42.p.rapidapi.com"
-        }
+    st.session_state.messages.append({"role": "assistant", "content": reply})
 
-        try:
-            response = requests.post(url, json=payload, headers=headers)
-            result = response.json()
-
-            st.success(result['result'])
-
-        except:
-            st.error("❌ API error, try again later")
+    with st.chat_message("assistant"):
+        st.write(reply)
