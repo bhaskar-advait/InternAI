@@ -3,7 +3,7 @@ import os
 from openai import OpenAI
 
 # 🔐 API key from secrets
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+client = OpenAI(api_key=os.getenv("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"))
 
 st.set_page_config(page_title="InternAI Chat", page_icon="🤖")
 
