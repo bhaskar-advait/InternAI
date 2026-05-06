@@ -28,7 +28,7 @@ if st.button("Recommend"):
 
         headers = {
             "content-type": "application/json",
-            "X-RapidAPI-Key": "abc8f24941msh2b05739e813230ep1c2db0jsnb5cc6114bbe6",
+            "X-RapidAPI-Key": "86cbc6b90cmshdbc6eb552684adbp13a2c5jsnf0a18a7af4ce",
             "X-RapidAPI-Host": "chatgpt-42.p.rapidapi.com"
         }
 
