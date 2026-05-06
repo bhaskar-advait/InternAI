@@ -1,112 +1,95 @@
-import streamlit as st
-
-st.set_page_config(page_title="InternAI Chat", page_icon="🤖")
-
-st.title("🤖 InternAI - Smart Career Chat")
-
-if "messages" not in st.session_state:
-    st.session_state.messages = []
-
-# display chat
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.write(msg["content"])
-
-user_input = st.chat_input("Ask about career, exams, roadmap...")
-
 def get_response(text):
     text = text.lower()
 
     # 🎯 GATE
     if "gate" in text:
-        return """🎯 GATE Preparation Guide:
-👉 Subjects: Core subjects (branch specific)
-👉 Strategy:
-- Complete syllabus once
-- Solve PYQs (most important)
-- Mock tests weekly
-👉 Resources:
-- Made Easy / ACE Academy notes
-👉 Timeline:
-- 6–12 months serious prep
+        return """🎯 GATE Preparation + Internship Path:
 
-Which branch are you from?"""
+📚 Preparation:
+- Focus on core subjects (branch specific)
+- Solve PYQs
+- Mock tests weekly
+
+💼 Internships:
+- Research Intern (IIT/NIT)
+- Subject Expert Intern (Chegg, CourseHero)
+- Teaching Assistant
+
+🚀 Next Step:
+Start preparing + apply for academic internships
+
+👉 Which branch are you from?"""
 
     # 🎯 UPSC
     elif "upsc" in text:
-        return """📚 UPSC Strategy:
-👉 Start with NCERT (6–12)
-👉 Daily newspaper (The Hindu)
-👉 Subjects: Polity, History, Geography, Economy
-👉 Practice answer writing
-👉 Give mock tests
+        return """📚 UPSC + Career Path:
 
-Do you need subject-wise plan?"""
+📖 Preparation:
+- NCERT + Current Affairs
+- Answer writing
+- Mock tests
 
-    # 🎯 IIT / JEE
-    elif "iit" in text or "jee" in text:
-        return """🎯 IIT-JEE Preparation:
-👉 Focus on PCM
-👉 Solve PYQs + coaching modules
-👉 Daily practice (6–8 hrs)
-👉 Strong concepts + revision
+💼 Internships:
+- NGO Intern
+- Policy Research Intern
+- Social Work Projects
 
-Are you in class 11 or 12?"""
+🚀 Next Step:
+Work with NGOs + build profile
 
-    # 🎯 AI / Tech
+👉 Optional subject decide kiya?"""
+
+    # 🎯 AI / Data Science
     elif "ai" in text or "data science" in text:
-        return """🤖 AI Roadmap:
-👉 Learn Python
-👉 Math basics (stats, linear algebra)
-👉 Machine Learning
-👉 Projects (very important)
-👉 Internship / Kaggle
+        return """🤖 AI Career + Internship:
 
-Beginner ho ya thoda experience hai?"""
+📚 Skills:
+- Python, ML, Deep Learning
+- Projects (very important)
 
-    # 🎯 Business
+💼 Internships:
+- Data Science Intern
+- ML Intern
+- AI Research Intern
+
+🌐 Platforms:
+- Internshala
+- LinkedIn
+- Kaggle
+
+🚀 Next Step:
+Build 2–3 projects + apply daily
+
+👉 Beginner ho ya already coding aati hai?"""
+
+    # 🎯 Business / Startup
     elif "business" in text or "startup" in text:
-        return """💼 Business Guide:
-👉 Learn marketing + sales
-👉 Solve real-world problem
-👉 Start small
-👉 Build network
+        return """💼 Business + Internship:
 
-Tumhara idea kya hai?"""
+📚 Skills:
+- Marketing, Sales, Finance
+
+💼 Internships:
+- Marketing Intern
+- Sales Intern
+- Startup Intern
+
+🚀 Next Step:
+Join startup + learn practical skills
+
+👉 Online business ya offline?"""
 
     # 🎯 Philosophy
     elif "philosophy" in text:
-        return """🧠 Philosophy Path:
-👉 Read: Vedanta, Buddha, Western philosophy
-👉 Career:
-- Teaching
+        return """🧠 Philosophy + Career:
+
+📚 Skills:
+- Critical thinking
 - Writing
-- UPSC optional
-👉 Practice thinking + writing
 
-Career chahiye ya knowledge depth?"""
+💼 Internships:
+- Content Writer
+- Research Intern
+- Teaching Assistant
 
-    # 🎯 Default (smart fallback)
-    else:
-        return f"""🤔 I understood you said: "{text}"
-
-👉 Try being more specific:
-- Career (AI, UPSC, GATE, business)
-- Goal (job, exam, skill)
-
-Example: "GATE preparation for CSE"  
-I'll guide you properly 👍"""
-
-# chat flow
-if user_input:
-    st.session_state.messages.append({"role": "user", "content": user_input})
-
-    with st.chat_message("user"):
-        st.write(user_input)
-
-    reply = get_response(user_input)
-
-    st.session_state.messages.append({"role": "assistant", "content": reply})
-
-    with st.chat_message("assistant"):
-        st.write(reply)
+🚀
